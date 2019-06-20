@@ -1,0 +1,22 @@
+{
+    "name": "mchamper/laravel-responses",
+    "description": "",
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Mchamper\\LaravelResponses\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mchamper\\LaravelResponses\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mchamper\\LaravelResponses\\Providers\\LaravelResponsesServiceProvider"
+            ]
+        }
+    }
+}
