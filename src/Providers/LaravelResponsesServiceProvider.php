@@ -3,6 +3,8 @@
 namespace Mchamper\LaravelResponses\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Mchamper\LaravelResponses\ResponseSuccess;
+use Mchamper\LaravelResponses\ResponseError;
 
 class LaravelResponsesServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,10 @@ class LaravelResponsesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->publishes([
+            __DIR__ . '/../config/auth.php' => config_path('errors/auth.php'),
+            __DIR__ . '/../config/default.php' => config_path('errors/default.php')
+        ]);
     }
 
     /**
@@ -24,19 +29,17 @@ class LaravelResponsesServiceProvider extends ServiceProvider
     public function boot()
     {
         \Response::macro('jsonSuccess', function ($body = null, $message = 'Ok.', $status = 200) {
-            return \Response::json([
-                'message'  => $message,
-                'body' => $body,
-            ], $status);
+            return \Response::json(new ResponseSuccess($message, $body), $status);
         });
 
-        \Response::macro('jsonError', function ($message, $status = 400) {
-            return \Response::json([
-                'error'  => [
-                    'code' => 0,
-                    'message' => $message
-                ]
-            ], $status);
+        \Response::macro('jsonError', function ($message, $status = null) {
+            $responseError = new ResponseError($message);
+
+            if ($status) {
+                $responseError->error->status = $status;
+            }
+
+            return \Response::json($responseError, $responseError->error->status);
         });
     }
 }
