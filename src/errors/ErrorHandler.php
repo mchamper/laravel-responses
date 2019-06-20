@@ -80,7 +80,7 @@ class ErrorHandler
         }
 
         /**
-         * Código automático para exceptiones Http.
+         * Código automático para excepciones Http.
          */
         if (method_exists($e, 'getStatusCode')) {
             return $e->getStatusCode();
