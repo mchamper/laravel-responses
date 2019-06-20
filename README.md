@@ -1,4 +1,4 @@
-# Laravel-Responses
+# Laravel Responses
 
 Agregar al archivo composer.json del proyecto de Laravel:
 
