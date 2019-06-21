@@ -17,7 +17,7 @@ Agregar al archivo composer.json del proyecto Laravel principal este repositorio
 composer require mchamper/laravel-responses
 ```
 ```
-php artisan vendor:publish --provider=Mchamper\LaravelResponses\Providers\LaravelResponsesServiceProvider
+php artisan vendor:publish --provider="Mchamper\LaravelResponses\Providers\LaravelResponsesServiceProvider"
 ```
 
 ## Utilización

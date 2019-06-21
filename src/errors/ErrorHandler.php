@@ -86,6 +86,14 @@ class ErrorHandler
             return $e->getStatusCode();
         }
 
+        if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return 404;
+        }
+
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
+            return 422;
+        }
+
         /**
          * Códigos 500 para el resto de las exceptiones.
          */
