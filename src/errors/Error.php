@@ -20,5 +20,9 @@ class Error
         $this->type = \Str::studly($config['type'] ?? 'Generic') . 'Error';
         $this->exception = $config['exception'] ?? null;
         $this->errors = $config['errors'] ?? null;
+
+        if (isset($config['trace'])) {
+            $this->trace = $config['trace'];
+        }
     }
 }

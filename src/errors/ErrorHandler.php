@@ -11,6 +11,7 @@ class ErrorHandler
     private $_exceptionStatus;
     private $_exceptionName;
     private $_exceptionErrors;
+    private $_exceptionTrace;
 
     public function __construct() {
         //
@@ -31,6 +32,10 @@ class ErrorHandler
 
             if ($this->_exceptionStatus) {
                 $errorConfig['status'] = $this->_exceptionStatus;
+            }
+
+            if ($this->_exceptionTrace) {
+                $errorConfig['trace'] = $this->_exceptionTrace;
             }
         }
 
@@ -54,8 +59,16 @@ class ErrorHandler
     }
 
     private function _resolveIdentifierException(\Exception $e) {
-        // $this->_exceptionName = get_class($e);
-        $this->_exceptionName = class_basename($e);
+        if (config('app.debug') === true) {
+            $this->_exceptionName = get_class($e);
+
+            if (method_exists($e, 'getTrace')) {
+                $this->_exceptionTrace = $e->getTrace();
+            }
+        } else {
+            $this->_exceptionName = class_basename($e);
+        }
+
         $this->_exceptionStatus = $this->_getExceptionStatus($e);
 
         if (method_exists($e, 'errors')) {
