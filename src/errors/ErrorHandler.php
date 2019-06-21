@@ -30,7 +30,7 @@ class ErrorHandler
             $errorConfig['exception'] = $this->_exceptionName;
             $errorConfig['errors'] = $this->_exceptionErrors;
 
-            if ($this->_exceptionStatus) {
+            if ($this->_exceptionStatus && !isset($errorConfig['status'])) {
                 $errorConfig['status'] = $this->_exceptionStatus;
             }
 
@@ -97,6 +97,10 @@ class ErrorHandler
          */
         if (method_exists($e, 'getStatusCode')) {
             return $e->getStatusCode();
+        }
+
+        if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+            return 401;
         }
 
         if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
