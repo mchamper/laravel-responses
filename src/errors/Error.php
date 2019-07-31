@@ -13,6 +13,12 @@ class Error
     public $errors;
 
     public function __construct(array $config = null) {
+        if (function_exists('studly_case')) {
+            $type = studly_case($config['type'] ?? 'Generic') . 'Error';
+        } else {
+            $type = \Str::studly($config['type'] ?? 'Generic') . 'Error';
+        }
+
         $this->code = $config['code'] ?? 0;
         $this->status = $config['status'] ?? 400;
         $this->message = $config['message'] ?? '';
