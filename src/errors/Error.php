@@ -23,7 +23,7 @@ class Error
         $this->status = $config['status'] ?? 400;
         $this->message = $config['message'] ?? '';
         $this->name = $config['name'] ?? null;
-        $this->type = \Str::studly($config['type'] ?? 'Generic') . 'Error';
+        $this->type = $type;
         $this->exception = $config['exception'] ?? null;
         $this->errors = $config['errors'] ?? null;
 
