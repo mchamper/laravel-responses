@@ -2,6 +2,8 @@
 
 namespace Mchamper\LaravelResponses\Errors;
 
+use Illuminate\Support\Str;
+
 class Error
 {
     public $code;
@@ -11,12 +13,13 @@ class Error
     public $type;
     public $exception;
     public $errors;
+    public $but;
 
     public function __construct(array $config = null) {
         if (function_exists('studly_case')) {
-            $type = studly_case($config['type'] ?? 'Generic') . 'Error';
+            $type = Str::studly($config['type'] ?? 'Generic') . 'Error';
         } else {
-            $type = \Str::studly($config['type'] ?? 'Generic') . 'Error';
+            $type = Str::studly($config['type'] ?? 'Generic') . 'Error';
         }
 
         $this->code = $config['code'] ?? 0;
@@ -26,6 +29,7 @@ class Error
         $this->type = $type;
         $this->exception = $config['exception'] ?? null;
         $this->errors = $config['errors'] ?? null;
+        $this->but = $config['but'] ?? null;
 
         if (isset($config['trace'])) {
             $this->trace = $config['trace'];
