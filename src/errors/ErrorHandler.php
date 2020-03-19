@@ -2,6 +2,7 @@
 
 namespace Mchamper\LaravelResponses\Errors;
 
+use Exception;
 use Mchamper\LaravelResponses\Errors\Error;
 
 class ErrorHandler
@@ -11,6 +12,7 @@ class ErrorHandler
     private $_exceptionStatus;
     private $_exceptionName;
     private $_exceptionErrors;
+    private $_exceptionBut;
     private $_exceptionTrace;
 
     public function __construct() {
@@ -29,6 +31,7 @@ class ErrorHandler
         if ($this->_exceptionName) {
             $errorConfig['exception'] = $this->_exceptionName;
             $errorConfig['errors'] = $this->_exceptionErrors;
+            $errorConfig['but'] = $this->_exceptionBut;
 
             if ($this->_exceptionStatus && !isset($errorConfig['status'])) {
                 $errorConfig['status'] = $this->_exceptionStatus;
@@ -43,7 +46,7 @@ class ErrorHandler
     }
 
     private function _resolveIdentifier($identifier) {
-        if ($identifier instanceof \Exception) {
+        if ($identifier instanceof Exception) {
             $this->_resolveIdentifierException($identifier);
         } else {
             if (is_int($identifier)) {
@@ -58,7 +61,7 @@ class ErrorHandler
         }
     }
 
-    private function _resolveIdentifierException(\Exception $e) {
+    private function _resolveIdentifierException(Exception $e) {
         if (config('app.debug') === true) {
             $this->_exceptionName = get_class($e);
 
@@ -75,6 +78,10 @@ class ErrorHandler
             $this->_exceptionErrors = $e->errors();
         }
 
+        if (method_exists($e, 'but')) {
+            $this->_exceptionBut = $e->but();
+        }
+
         $identifier = $e->getMessage();
 
         if (is_numeric($identifier)) {
@@ -84,7 +91,7 @@ class ErrorHandler
         $this->_resolveIdentifier($identifier);
     }
 
-    private function _getExceptionStatus(\Exception $e) {
+    private function _getExceptionStatus(Exception $e) {
         /**
          * Código manualmente indicado.
          */
