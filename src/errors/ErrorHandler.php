@@ -110,6 +110,10 @@ class ErrorHandler
             return 401;
         }
 
+        if ($e instanceof \Illuminate\Auth\Access\AuthorizationException) {
+            return 403;
+        }
+
         if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
             return 404;
         }
