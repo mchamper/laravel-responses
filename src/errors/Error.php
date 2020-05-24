@@ -25,7 +25,7 @@ class Error
 
         $this->code = $config['code'] ?? 0;
         $this->status = $config['status'] ?? 400;
-        $this->message = Lang::get('errors.' . $config['name']);
+        $this->message = !empty($config['name']) ? Lang::get('errors.' . $config['name']): $config['message'] ?? '';
         $this->name = $config['name'] ?? null;
         $this->type = $type;
         $this->exception = $config['exception'] ?? null;
