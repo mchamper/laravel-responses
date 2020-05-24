@@ -63,7 +63,7 @@ class ErrorHandler
 
     private function _resolveIdentifierException(Exception $e) {
         if (config('app.debug') === true) {
-            $this->_exceptionName = get_class($e);
+            $this->_exceptionName = class_basename($e);
 
             if (method_exists($e, 'getTrace')) {
                 $this->_exceptionTrace = $e->getTrace();
