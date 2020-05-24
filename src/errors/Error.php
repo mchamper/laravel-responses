@@ -2,6 +2,7 @@
 
 namespace Mchamper\LaravelResponses\Errors;
 
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 
 class Error
@@ -24,7 +25,7 @@ class Error
 
         $this->code = $config['code'] ?? 0;
         $this->status = $config['status'] ?? 400;
-        $this->message = $config['message'] ?? '';
+        $this->message = !empty($config['name']) ? Lang::get('errors.' . $config['name']): $config['message'] ?? '';
         $this->name = $config['name'] ?? null;
         $this->type = $type;
         $this->exception = $config['exception'] ?? null;
