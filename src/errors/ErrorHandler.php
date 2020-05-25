@@ -3,6 +3,7 @@
 namespace Mchamper\LaravelResponses\Errors;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Mchamper\LaravelResponses\Errors\Error;
 
 class ErrorHandler
@@ -82,7 +83,15 @@ class ErrorHandler
             $this->_exceptionBut = $e->but();
         }
 
-        $identifier = $e->getMessage();
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $this->_exceptionStatus = 400;
+
+            config('app.debug') ?
+                $identifier = $e->getMessage():
+                $identifier = 'Bad request.';
+        } else {
+            $identifier = $e->getMessage();
+        }
 
         if (is_numeric($identifier)) {
             $identifier = (int) $identifier;
@@ -102,10 +111,6 @@ class ErrorHandler
         /**
          * Código automático para excepciones Http.
          */
-        if (method_exists($e, 'getStatusCode')) {
-            return $e->getStatusCode();
-        }
-
         if ($e instanceof \Illuminate\Auth\AuthenticationException) {
             return 401;
         }
@@ -118,13 +123,14 @@ class ErrorHandler
             return 404;
         }
 
+        if ($e instanceof \Illuminate\Database\Eloquent\RelationNotFoundException) {
+            return 400;
+        }
+
         if ($e instanceof \Illuminate\Validation\ValidationException) {
             return 422;
         }
 
-        /**
-         * Códigos 500 para el resto de las exceptiones.
-         */
         return 500;
     }
 
